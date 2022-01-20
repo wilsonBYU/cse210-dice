@@ -45,6 +45,8 @@ class Director:
         Args:
             self (Director): An instance of Director.
         """
+        if not self.is_playing:
+            return
         roll_dice = input("Roll dice? [y/n] ")
         self.is_playing = (roll_dice == "y")
        
@@ -56,13 +58,16 @@ class Director:
         """
         if not self.is_playing:
             return 
-
+        
+        self.score = 0
         for i in range(len(self.dice)):
             die = self.dice[i]
             die.roll()
             self.score += die.points 
         self.total_score += self.score
-
+        if self.score == 0:
+            print("No score received")
+        
     def do_outputs(self):
         """Displays the dice and the score. Also asks the player if they want to roll again. 
 
@@ -71,7 +76,7 @@ class Director:
         """
         if not self.is_playing:
             return
-        
+
         values = ""
         for i in range(len(self.dice)):
             die = self.dice[i]
@@ -79,4 +84,6 @@ class Director:
 
         print(f"You rolled: {values}")
         print(f"Your score is: {self.total_score}\n")
-        self.is_playing == (self.score > 0)
+        self.is_playing = self.score > 0
+        if not self.is_playing:
+            print(f"No score received.\nNice game, your total score was {self.total_score}")
